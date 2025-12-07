@@ -52,6 +52,12 @@ app.post('/api/tasks', (req, res) => {
 app.put('/api/tasks/:id', (req, res) => {
   try {
     const id = parseInt(req.params.id);
+    
+    // Validate ID
+    if (isNaN(id)) {
+      return res.status(400).json({ error: 'Invalid task ID' });
+    }
+    
     const { title, description, completed } = req.body;
 
     // Find the task
@@ -70,7 +76,9 @@ app.put('/api/tasks/:id', (req, res) => {
     // Update task
     const task = tasks[taskIndex];
     if (title !== undefined) task.title = title.trim();
-    if (description !== undefined) task.description = description.trim();
+    if (description !== undefined) {
+      task.description = typeof description === 'string' ? description.trim() : '';
+    }
     if (completed !== undefined) task.completed = completed === true;
     task.updatedAt = new Date().toISOString();
 
@@ -84,6 +92,11 @@ app.put('/api/tasks/:id', (req, res) => {
 app.delete('/api/tasks/:id', (req, res) => {
   try {
     const id = parseInt(req.params.id);
+    
+    // Validate ID
+    if (isNaN(id)) {
+      return res.status(400).json({ error: 'Invalid task ID' });
+    }
 
     // Find the task
     const taskIndex = tasks.findIndex(task => task.id === id);
