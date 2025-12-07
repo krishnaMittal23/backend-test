@@ -35,7 +35,7 @@ app.post('/api/tasks', (req, res) => {
     const newTask = {
       id: nextId++,
       title: title.trim(),
-      description: description ? description.trim() : '',
+      description: typeof description === 'string' ? description.trim() : '',
       completed: completed === true,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
